@@ -31,8 +31,8 @@ const Navbar: FC = () => {
     <>
       <header>
         <nav className="navbar navbar-expand-lg bg-white">
-          <div className="container-xxl p-3 pb-0">
-            <Link className="navbar-brand mt-0 ps-3" to={routes.HOME}>
+          <div className="container-fluid  p-3 pb-0">
+            <Link className="navbar-brand mt-0 ps-4 ms-2" to={routes.HOME}>
               <img src="/images/logo.png" alt="geotagger" width={180} />
             </Link>
             <button
@@ -51,7 +51,7 @@ const Navbar: FC = () => {
               className="collapse navbar-collapse justify-content-end align-items-center"
               id="navbarTogglerDemo2"
             >
-              <ul className="navbar-nav mb-2 pe-3 mb-lg-0">
+              <ul className="navbar-nav mb-2 pe-4 me-2 mb-lg-0">
                 {authStore.user ? (
                   <li className="nav-item pe-4">
                     <Button className="btn btn-dark" onClick={singout}>

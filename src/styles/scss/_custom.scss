@@ -4,7 +4,10 @@
   --orange: #FE7F2D;
   --yellow: #FCCA46;
   --darkGreen: #659E89;
-  --lightGree: #A1C181;
+  --lightGreen: #A1C181;
+  --white: #ffffff;
+  --black: #000000;
+
 }
 
 .layout-container {
@@ -29,4 +32,46 @@
     border-radius: 0.5em;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.btn-light,
+.btn-light:hover,
+.btn-light:active,
+.btn-light:visited,
+.btn-light:focus{
+  border: 1px solid lightgrey;
+  background-color: #ffffff;
+}
+
+footer{
+  background-color: var(--green);
+  color: var(--white);
+  padding: 10px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.gradient-bg {
+  background: linear-gradient(to left, var(--lightGreen), var(--darkGreen));
+  height: 100%;
+}
+
+.fill { 
+  min-height: 100%;
+  height: 100%;
+}
+
+.link-green,
+.link-green:hover,
+.link-green:active,
+.link-green:focus{
+  color: var(--green);
+}
+
+.login-icon{
+  width: 35px;
+  height: 35px;
+  padding-right: 10px;
+  margin: 0px;
 }
