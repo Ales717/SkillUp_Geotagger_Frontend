@@ -7,6 +7,9 @@ import authStore from 'stores/auth.store'
 import Toast from 'react-bootstrap/Toast'
 import { StatusCode } from 'constants/errorConstants'
 import * as API from 'api/Api'
+import { FaCirclePlus, FaCircleUser } from 'react-icons/fa6'
+import { useQuery } from 'react-query'
+import Avatar from 'react-avatar'
 
 const Navbar: FC = () => {
   const navigate = useNavigate()
@@ -26,6 +29,11 @@ const Navbar: FC = () => {
       navigate('/')
     }
   }
+
+  const { data } = useQuery(
+    ['currentUser'],
+    () => API.currentUser(),
+  )
 
   return (
     <>
@@ -53,15 +61,52 @@ const Navbar: FC = () => {
             >
               <ul className="navbar-nav mb-2 pe-4 me-2 mb-lg-0">
                 {authStore.user ? (
-                  <li className="nav-item pe-4">
-                    <Button className="btn btn-dark" onClick={singout}>
-                      Signout
-                    </Button>
-                  </li>
+                  <>
+                    <li className="nav-item pe-2 pt-2">
+                      <Button className="btn btn-link" href={routes.HOME}>
+                        Home
+                      </Button>
+                    </li>
+                    <li className="nav-item pe-2 pt-2">
+                      <Button className="btn btn-link" >
+                        Profile settings
+                      </Button>
+                    </li>
+                    <li className="nav-item pe-2 pt-2">
+                      <Button className="btn btn-link" onClick={singout}>
+                        Signout
+                      </Button>
+                    </li>
+                    <li className="nav-item pe-2 pt-1">
+                      <div className='nav-profile'>
+                        <Button className="nav-profile-button" href={routes.PROFILE}>
+                          {!data && (
+                            <FaCircleUser className='nav-profile-button-icon' />
+                          )}
+                          {data && (
+                            <Avatar
+                              round
+                              src={`${process.env.REACT_APP_API_URL}${data?.data.avatar}`}
+                              alt='avatar'
+                              className='w-100 h-100'
+                            />
+                          )}
+
+                        </Button>
+                        <p className='nav-profile-points p-3'>10</p>
+                      </div>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <Button className="puls-button" href={routes.ADDLOCATION}>
+                        <FaCirclePlus className='plus-icon' />
+                      </Button>
+                    </li>
+                  </>
+
                 ) : (
                   <>
                     <li className="nav-item pe-2">
-                      <NavLink className="nav-link" style={{ fontWeight: 'bold' }} to={routes.LOGIN}>
+                      <NavLink className="nav-link fw-bold" to={routes.LOGIN}>
                         Sign in
                       </NavLink>
                     </li>

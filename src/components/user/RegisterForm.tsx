@@ -1,5 +1,5 @@
 import { RegisterUserFields, useRegisterForm } from 'hooks/react-hook-form/useRegister'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as API from 'api/Api'
 import { StatusCode } from 'constants/errorConstants'
@@ -10,6 +10,7 @@ import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
 import { routes } from 'constants/routesConstants'
+import { FaCircleUser } from 'react-icons/fa6'
 
 const RegisterForm = () => {
     const navigate = useNavigate()
@@ -19,6 +20,8 @@ const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+    const [file, setFile] = useState<File | null>(null)
+
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState)
     }
@@ -27,32 +30,75 @@ const RegisterForm = () => {
     }
 
     const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-        const response = await API.createUser(data)
-        if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-            setApiError(response.data.message)
-            setShowError(true)
-        } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-            setApiError(response.data.message)
-            setShowError(true)
-        } else {
+        try {
+            const formData = new FormData()
+            formData.append('email', data.email)
+            formData.append('first_name', data.first_name)
+            formData.append('last_name', data.last_name)
+            formData.append('password', data.password)
+            formData.append('confirm_password', data.confirm_password)
+            if (file) {
+                formData.append('file', file, file.name)
+            }
 
-            const loginResponse = await API.login({
-                email: data.email,
-                password: data.password,
-            })
-            if (loginResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-                setApiError(loginResponse.data.message)
+
+            const response = await API.createUser(data)
+
+            if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+                setApiError(response.data.message)
                 setShowError(true)
-            } else if (loginResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-                setApiError(loginResponse.data.message)
+            } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+                setApiError(response.data.message)
                 setShowError(true)
             } else {
+                const fileResponse = await API.uploadAvatar(
+                    formData,
+                    response.data.id,
+                )
+                if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
+                    setApiError(fileResponse.data.message)
+                    setShowError(true)
+                } else if (
+                    fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+                ) {
+                    setApiError(fileResponse.data.message)
+                    setShowError(true)
+                } else {
+                    const loginResponse = await API.login({
+                        email: data.email,
+                        password: data.password,
+                    })
+                    if (loginResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
+                        setApiError(loginResponse.data.message)
+                        setShowError(true)
+                    } else if (loginResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+                        setApiError(loginResponse.data.message)
+                        setShowError(true)
+                    } else {
 
-                authStore.login(loginResponse.data)
-                navigate('/')
+                        authStore.login(loginResponse.data)
+                        navigate('/')
+                    }
+                }
+
+
             }
+
+        } catch (error) {
+            setApiError('An error occurred. Please try again later.')
+            setShowError(true)
         }
     })
+
+    const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        if (target.files) {
+            const myfile = target.files[0]
+            setFile(myfile)
+        }
+    }
+    const handleRemoveImage = () => {
+        setFile(null)
+    }
 
     return (
         <>
@@ -60,6 +106,31 @@ const RegisterForm = () => {
                 <h2 className="display-5 fw-bold">Sing up</h2>
                 <p className='text-center  w-75'>Your name will apperar on posts and you public profile.</p>
                 <Form className="register-form pt-0" onSubmit={onSubmit}>
+                    <Form.Group className="mb-3">
+                        <div className="image-upload-container">
+                            {!file && (
+                                <label htmlFor="file" className="add-image-button">
+                                    <input
+                                        type="file"
+                                        id="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <div className="nav-profile-button-big"><FaCircleUser className='nav-profile-button-icon' /></div>
+                                </label>
+                            )}
+                            {file && (
+                                <div className="selected-image-container">
+                                    <img className='selected-img' src={URL.createObjectURL(file)} alt="Selected" />
+                                    <Button onClick={handleRemoveImage} className='x-button pt-0 pb-3 ps-0 mb-5'>
+                                        X
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </Form.Group>
+
                     <Controller
                         control={control}
                         name="email"

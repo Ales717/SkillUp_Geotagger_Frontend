@@ -18,6 +18,8 @@ type AppRoute = RouteProps & {
 const Home = lazy(() => import('pages/Home'))
 
 /* Private routes */
+const AddLocation = lazy(() => import('pages/Locations/AddLocation'))
+const Profile = lazy(() => import('pages/Profile'))
 
 /* Restricted routes */
 const Login = lazy(() => import('pages/Login'))
@@ -40,7 +42,16 @@ export const AppRoutes: AppRoute[] = [
   },
 
   // Private Routes
-
+  {
+    type: RouteType.PRIVATE,
+    path: '/profile',
+    children: <Profile />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/addlocation',
+    children: <AddLocation />,
+  },
   // Public Routes
   {
     type: RouteType.PUBLIC,
