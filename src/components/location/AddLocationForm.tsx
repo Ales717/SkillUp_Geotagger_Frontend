@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import * as API from 'api/Api'
 import { CreateUpdateLocationFields, useCreateUpdateLocationForm } from 'hooks/react-hook-form/useCreateUpdateLocation'
 import { ChangeEvent, useState } from 'react'
@@ -24,7 +24,20 @@ const AddLocationForm = () => {
         () => API.currentUser(),
     )
 
+
+
     const userId = data?.data.id
+    console.log(userId)
+
+    const { mutate: addPoints } = useMutation(
+        () => API.addPoints(userId),
+        {
+            onError: (error) => {
+                setApiError('Failed to add points. Please try again later.')
+                setShowError(true)
+            }
+        }
+    )
 
     const onSubmit = handleSubmit(async (data: CreateUpdateLocationFields) => {
         try {
@@ -66,7 +79,11 @@ const AddLocationForm = () => {
                     setApiError(fileResponse.data.message)
                     setShowError(true)
                 } else {
-                    navigate(`${routes.PROFILE}`)
+                    addPoints(undefined, {
+                        onSuccess: () => {
+                            navigate(`${routes.PROFILE}`)
+                        },
+                    })
                 }
             }
         } catch (error) {
@@ -96,25 +113,27 @@ const AddLocationForm = () => {
                         <Form.Group className="mb-3">
                             <div className="image-upload-container">
                                 {!file && (
-                                    <label htmlFor="image" className="add-image-button">
-                                        <input
-                                            type="file"
-                                            id="image"
-                                            accept="image/*"
-                                            onChange={handleFileChange}
-                                            style={{ display: 'none' }}
-                                        />
-                                        <div className='btn-add-img'>Add Image</div>
-                                    </label>
+                                    <div className="image-upload-btn p-0">
+                                        <img className='w-100 rounded' src="images/img-empty.png" alt="No image" />
+                                        <label htmlFor="image" >
+                                            <input
+                                                type="file"
+                                                id="image"
+                                                accept="image/*"
+                                                onChange={handleFileChange}
+                                                style={{ display: 'none' }}
+                                            />
+                                            <div className='img-button p-2 mt-3'>Upload Image</div>
+                                        </label>
+                                    </div>
                                 )}
                                 {file && (
-                                    <div className="selected-image-container">
-                                        <img src={URL.createObjectURL(file)} alt="Selected" />
-                                        <Button onClick={handleRemoveImage} className='rounded-btn'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                            </svg>
+                                    <div className='image-upload-btn'>
+                                        <div className="selected-image-container">
+                                            <img className='selected-image' src={URL.createObjectURL(file)} alt="Selected" />
+                                        </div>
+                                        <Button onClick={handleRemoveImage} className='img-button mt-2'>
+                                            Remove Image
                                         </Button>
                                     </div>
                                 )}

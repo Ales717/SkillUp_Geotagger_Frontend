@@ -22,3 +22,9 @@ export const uploadAvatar = async (formData: FormData, id: string) =>
     `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${id}`,
     formData,
   )
+
+export const addPoints = async (id: string) =>
+  apiRequest<undefined, UserType>(
+    'patch',
+    `${apiRoutes.USERS_PREFIX}/pointsAdd/${id}`,
+  )

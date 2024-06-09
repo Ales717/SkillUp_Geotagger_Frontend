@@ -10,7 +10,7 @@ const Layout: FC<Props> = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="layout-container container-xxl p-4 ms-2 me-2">{children}</div>
+      <div className="layout-container p-4 ms-2 me-2">{children}</div>
       <Footer />
     </>
   )

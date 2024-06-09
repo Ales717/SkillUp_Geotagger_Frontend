@@ -16,3 +16,15 @@ export const uploadImage = async (formData: FormData, id: string) =>
         `${apiRoutes.UPLOAD_LOCATION_IMAGE}/${id}`,
         formData,
     )
+
+export const getLocationById = async (id: string) =>
+    apiRequest<undefined, LocationType>(
+        'get',
+        `${apiRoutes.LOCATIONS_PREFIX}/${id}`
+    )
+
+export const getLocationByUserId = async (id: string) =>
+    apiRequest<undefined, LocationType[]>(
+        'get',
+        `${apiRoutes.LOCATIONS_PREFIX}/user/${id}`
+    )
