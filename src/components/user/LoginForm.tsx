@@ -34,6 +34,7 @@ const LoginForm = () => {
             setApiError(response.data.message)
             setShowError(true)
         } else {
+            console.log(response.data)
             authStore.login(response.data)
             navigate('/')
         }

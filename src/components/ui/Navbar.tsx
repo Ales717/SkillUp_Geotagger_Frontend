@@ -30,11 +30,11 @@ const Navbar: FC = () => {
     }
   }
 
-  const { data } = useQuery(
-    ['currentUser'],
-    () => API.currentUser(),
-  )
-
+  /*   const { data } = useQuery(
+      ['currentUser'],
+      () => API.currentUser(),
+    )
+    console.log(data) */
   return (
     <>
       <header>
@@ -80,20 +80,20 @@ const Navbar: FC = () => {
                     <li className="nav-item pe-2 pt-1">
                       <div className='nav-profile'>
                         <Button className="nav-profile-button" href={routes.PROFILE}>
-                          {!data && (
+                          {!authStore.user && (
                             <FaCircleUser className='nav-profile-button-icon' />
                           )}
-                          {data && (
+                          {authStore.user && (
                             <Avatar
                               round
-                              src={`${process.env.REACT_APP_API_URL}${data?.data.avatar}`}
+                              src={`${process.env.REACT_APP_API_URL}${authStore.user.avatar}`}
                               alt='avatar'
                               className='w-100 h-100'
                             />
                           )}
 
                         </Button>
-                        <p className='nav-profile-points p-3'>10</p>
+                        <p className='nav-profile-points p-3'>{authStore.user.points}</p>
                       </div>
                     </li>
                     <li className="nav-item pe-4">
