@@ -13,8 +13,8 @@ const Profile = () => {
     const [displayedCount, setDisplayedCount] = useState(5)
 
     const { data, isLoading } = useQuery(
-        ['getLocationByUserId'],
-        () => API.getLocationByUserId(UserId)
+        ['getLocationsByUserId'],
+        () => API.getLocationsByUserId(UserId)
     )
 
     const loadMore = () => {
@@ -28,7 +28,7 @@ const Profile = () => {
                     {!authStore.user ? (
                         <FaCircleUser className='nav-profile-button-icon' />
                     ) : (
-                        <div className='d-flex align-items-center'>
+                        <div className='d-flex align-items-center mb-3'>
                             <Avatar
                                 round
                                 src={`${process.env.REACT_APP_API_URL}${authStore.user.avatar}`}
@@ -46,6 +46,7 @@ const Profile = () => {
                                 <p>No data found</p>
                             ) : (
                                 <>
+                                    <h2>My uploads</h2>
                                     <div className="d-flex flex-wrap gap-4 justify-content-center">
                                         {data?.data.slice(0, displayedCount).map((location: LocationTypeId, index: number) => (
                                             <div key={index} className="">
@@ -55,7 +56,7 @@ const Profile = () => {
                                     </div>
                                     {displayedCount < data?.data.length && (
                                         <div className="text-center mt-4">
-                                            <button onClick={loadMore} className="btn btn-primary">Load More</button>
+                                            <button onClick={loadMore} className="btn btn-secondary">Load More</button>
                                         </div>
                                     )}
                                 </>

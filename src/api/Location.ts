@@ -23,8 +23,14 @@ export const getLocationById = async (id: string) =>
         `${apiRoutes.LOCATIONS_PREFIX}/${id}`
     )
 
-export const getLocationByUserId = async (id: string) =>
+export const getLocationsByUserId = async (id: string) =>
     apiRequest<undefined, LocationType[]>(
         'get',
         `${apiRoutes.LOCATIONS_PREFIX}/user/${id}`
+    )
+
+export const getLocations = async () =>
+    apiRequest<undefined, LocationType[]>(
+        'get',
+        `${apiRoutes.LOCATIONS_PREFIX}`
     )

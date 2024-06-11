@@ -77,7 +77,7 @@ const RegisterForm = () => {
                     } else {
 
                         authStore.login(loginResponse.data)
-                        navigate('/')
+                        navigate('/profile')
                     }
                 }
 
