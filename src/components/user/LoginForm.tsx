@@ -36,7 +36,7 @@ const LoginForm = () => {
         } else {
             console.log(response.data)
             authStore.login(response.data)
-            navigate('/')
+            navigate('/profile')
         }
     })
 

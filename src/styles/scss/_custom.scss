@@ -34,11 +34,11 @@
     padding-right: 20px;
 }
 
-.btn-primary,
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary:visited,
-.btn-primary:focus {
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited,
+.btn-secondary:focus {
     background-color: var(--white);
     border-color: var(--green);
     color: var(--green);
@@ -203,14 +203,51 @@ footer{
   height: 4em !important;
   width: 4em !important;
 }
-.location-card{
-  width: 20rem;
+
+.location-card-editable{
+  width: 21rem;
   height: 10rem;
   background-color: #CCCCCC;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
+}
+
+.location-card{
+  width: 21rem;
+  height: 10rem;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.location-card:hover {
+  background-color: var(--darkGreen);
+}
+
+.location-card:hover .location-card-img {
+  opacity: 0;
+}
+
+.location-card-button{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.location-card:hover .location-card-button {
+  display: block;
+  opacity: 1;
 }
 
 .location-card-img{
   height: 10rem;
+}
+
+.text-green{
+  color: var(--green)
 }
